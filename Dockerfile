@@ -1,9 +1,17 @@
 FROM python:3.9-slim
 
+# Run as root (required for apt)
+USER root
+
+# Fix /tmp permissions (CRITICAL for SageMaker)
+RUN chmod 1777 /tmp
+
+# Set working directory
 WORKDIR /app
 
-RUN apt update && \
-    apt install -y --no-install-recommends \
+# Install system dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
         curl \
         git \
         wget \
@@ -13,6 +21,11 @@ RUN apt update && \
         libtinfo6 && \
     rm -rf /var/lib/apt/lists/*
 
+# Copy your training code
 COPY trainer /app/trainer
 
+# Ensure Python logs show immediately
+ENV PYTHONUNBUFFERED=1
+
+# SageMaker training entrypoint
 ENTRYPOINT ["python", "-m", "trainer.task"]
